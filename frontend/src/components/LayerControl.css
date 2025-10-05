@@ -1,0 +1,129 @@
+.layer-control {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+}
+
+.layer-control-toggle {
+  background: rgba(26, 31, 46, 0.95);
+  border: 1px solid #2d3748;
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: #63b3ed;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s;
+}
+
+.layer-control-toggle:hover {
+  background: rgba(45, 55, 72, 0.95);
+  border-color: #3d4758;
+  transform: scale(1.05);
+}
+
+.layer-control.expanded .layer-control-toggle {
+  border-radius: 8px 8px 0 0;
+  border-bottom: none;
+}
+
+.layer-control-panel {
+  background: rgba(26, 31, 46, 0.98);
+  border: 1px solid #2d3748;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  min-width: 250px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.layer-control-panel h3 {
+  margin: 0 0 1rem 0;
+  font-size: 0.875rem;
+  color: #e6e9ef;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.layer-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.layer-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #cbd5e0;
+  font-size: 0.875rem;
+}
+
+.layer-option:hover {
+  background: rgba(45, 55, 72, 0.5);
+}
+
+.layer-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #63b3ed;
+}
+
+.layer-option svg {
+  color: #63b3ed;
+  flex-shrink: 0;
+}
+
+.layer-option span {
+  flex: 1;
+}
+
+.layer-info {
+  padding-top: 0.75rem;
+  border-top: 1px solid #2d3748;
+}
+
+.info-text {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #a0aec0;
+  line-height: 1.4;
+}
+
+.info-text strong {
+  color: #63b3ed;
+}
+
+@media (max-width: 768px) {
+  .layer-control {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .layer-control-panel {
+    min-width: 220px;
+  }
+}
+
