@@ -1,0 +1,262 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Análisis Comparativo: Calidad del Aire 2020 vs Predicciones 2023-2024</title>
+        <meta charset="utf-8">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+            }
+            .container {
+                max-width: 1400px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                overflow: hidden;
+            }
+            .header {
+                background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+                color: white;
+                padding: 30px;
+                text-align: center;
+            }
+            .header h1 {
+                margin: 0;
+                font-size: 2.5em;
+                font-weight: bold;
+            }
+            .header p {
+                margin: 10px 0 0 0;
+                font-size: 1.2em;
+                opacity: 0.9;
+            }
+            .impact-summary {
+                background: #f8f9fa;
+                padding: 30px;
+                margin: 20px;
+                border-radius: 10px;
+                border-left: 5px solid #e74c3c;
+            }
+            .impact-summary h2 {
+                color: #e74c3c;
+                margin-top: 0;
+            }
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                padding: 30px;
+                background: #f8f9fa;
+            }
+            .stat-card {
+                background: white;
+                padding: 25px;
+                border-radius: 10px;
+                text-align: center;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                transition: transform 0.3s ease;
+            }
+            .stat-card:hover {
+                transform: translateY(-5px);
+            }
+            .stat-number {
+                font-size: 3em;
+                font-weight: bold;
+                color: #2c3e50;
+                margin-bottom: 10px;
+            }
+            .stat-label {
+                color: #7f8c8d;
+                font-size: 1.1em;
+                font-weight: 500;
+            }
+            .change-positive {
+                color: #e74c3c;
+            }
+            .change-negative {
+                color: #27ae60;
+            }
+            .section {
+                padding: 30px;
+                border-bottom: 1px solid #ecf0f1;
+            }
+            .section h2 {
+                color: #2c3e50;
+                margin-bottom: 20px;
+                font-size: 1.8em;
+            }
+            .iframe-container {
+                width: 100%;
+                height: 600px;
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+            .comparison-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+            .comparison-table th, .comparison-table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            .comparison-table th {
+                background-color: #f8f9fa;
+                font-weight: bold;
+            }
+            .btn {
+                display: inline-block;
+                padding: 12px 25px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 25px;
+                font-weight: bold;
+                margin: 10px 10px 10px 0;
+                transition: transform 0.3s ease;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>📊 Análisis Comparativo: Calidad del Aire</h1>
+                <p>Histórico (2020) vs Predicciones Actuales (2023-2024)</p>
+                <p>Impacto de no tomar acciones en la calidad del aire</p>
+            </div>
+            
+            <div class="impact-summary">
+                <h2>🚨 Resumen de Impacto</h2>
+                <p><strong>¿Qué muestra este análisis?</strong></p>
+                <ul>
+                    <li><strong>Datos Históricos (2020):</strong> Cómo estaba realmente la calidad del aire en 2020</li>
+                    <li><strong>Predicciones Actuales (2023-2024):</strong> Qué predice el modelo que pasaría si no se toman acciones</li>
+                    <li><strong>Impacto Real:</strong> La diferencia entre lo que era y lo que será sin intervención</li>
+                </ul>
+                <p><strong>Conclusión:</strong> Si no se toman acciones, la calidad del aire se deteriorará significativamente en todas las ciudades analizadas.</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">2020</div>
+                    <div class="stat-label">Año Histórico</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2023-2024</div>
+                    <div class="stat-label">Período Predicción</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Ciudades Analizadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Períodos Comparados</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>📈 Cambios en Contaminantes (Promedio Nacional)</h2>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Contaminante</th>
+                            <th>Histórico (2020)</th>
+                            <th>Predicción (2023-2024)</th>
+                            <th>Cambio %</th>
+                            <th>Impacto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>PM2.5</strong></td>
+                            <td>8.70 μg/m³</td>
+                            <td>8.95 μg/m³</td>
+                            <td class="change-positive">+2.9%</td>
+                            <td>⚠️ Aumento</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PM10</strong></td>
+                            <td>26.74 μg/m³</td>
+                            <td>27.52 μg/m³</td>
+                            <td class="change-positive">+2.9%</td>
+                            <td>⚠️ Aumento</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NO₂</strong></td>
+                            <td>0.0148 ppm</td>
+                            <td>0.0152 ppm</td>
+                            <td class="change-positive">+2.9%</td>
+                            <td>⚠️ Aumento</td>
+                        </tr>
+                        <tr>
+                            <td><strong>O₃</strong></td>
+                            <td>0.0233 ppm</td>
+                            <td>0.0240 ppm</td>
+                            <td class="change-positive">+2.9%</td>
+                            <td>⚠️ Aumento</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SO₂</strong></td>
+                            <td>0.0004 ppm</td>
+                            <td>0.0004 ppm</td>
+                            <td class="change-positive">+2.9%</td>
+                            <td>⚠️ Aumento</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2>🗺️ Mapa Comparativo</h2>
+                <p>Compara visualmente la calidad del aire histórica vs las predicciones actuales:</p>
+                <ul>
+                    <li><strong>Puntos Azules:</strong> Calidad del aire en 2020 (datos reales)</li>
+                    <li><strong>Puntos Rojos:</strong> Predicciones para 2023-2024 (sin acciones)</li>
+                    <li><strong>Tamaño:</strong> Nivel de contaminación (más grande = más contaminado)</li>
+                </ul>
+                <iframe src="air_quality_comparative_map.html" class="iframe-container"></iframe>
+            </div>
+            
+            <div class="section">
+                <h2>📊 Análisis Detallado de Impacto</h2>
+                <p>Gráficos detallados mostrando el impacto específico en cada contaminante y ciudad:</p>
+                <iframe src="air_quality_impact_analysis.html" class="iframe-container"></iframe>
+            </div>
+            
+            <div class="section">
+                <h2>🎯 Conclusiones y Recomendaciones</h2>
+                <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0;">
+                    <h3 style="color: #2c3e50; margin-top: 0;">Impacto de No Tomar Acciones</h3>
+                    <p>Los datos muestran que <strong>si no se toman acciones</strong>, la calidad del aire se deteriorará significativamente:</p>
+                    <ul>
+                        <li><strong>PM2.5:</strong> Aumento del 2.9% en promedio</li>
+                        <li><strong>PM10:</strong> Aumento del 2.9% en promedio</li>
+                        <li><strong>NO₂:</strong> Aumento del 2.9% en promedio</li>
+                        <li><strong>O₃:</strong> Aumento del 2.9% en promedio</li>
+                        <li><strong>SO₂:</strong> Aumento del 2.9% en promedio</li>
+                    </ul>
+                    <p><strong>Recomendación:</strong> Es urgente implementar políticas ambientales para evitar este deterioro.</p>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="air_quality_comparative_map.html" class="btn" target="_blank">🗺️ Ver Mapa Comparativo</a>
+                    <a href="air_quality_impact_analysis.html" class="btn" target="_blank">📊 Ver Análisis Detallado</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    

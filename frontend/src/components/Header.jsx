@@ -1,8 +1,8 @@
 import React from 'react'
-import { Wind } from 'lucide-react'
+import { Wind, Bell } from 'lucide-react'
 import './Header.css'
 
-const Header = () => {
+const Header = ({ onNotificationClick }) => {
   return (
     <header className="header">
       <div className="header-content">
@@ -17,6 +17,14 @@ const Header = () => {
             <span className="info-label">Last Update:</span>
             <span className="info-value">{new Date().toLocaleTimeString()}</span>
           </div>
+          <button 
+            className="notification-button"
+            onClick={onNotificationClick}
+            title="Configurar notificaciones"
+          >
+            <Bell size={20} />
+            <span>Notificaciones</span>
+          </button>
         </div>
       </div>
     </header>

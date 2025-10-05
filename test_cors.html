@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test CORS - AirGuardian</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .success { color: green; }
+        .error { color: red; }
+        button { padding: 10px 20px; margin: 10px 0; background: #3b82f6; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #2563eb; }
+        .result { margin: 20px 0; padding: 15px; border-radius: 5px; }
+        .success-result { background: #d1fae5; border: 1px solid #10b981; }
+        .error-result { background: #fee2e2; border: 1px solid #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test CORS - AirGuardian</h1>
+        <p>Esta página prueba la comunicación entre el frontend y el backend.</p>
+        
+        <button onclick="testBackend()">1. Probar Backend</button>
+        <button onclick="testNotification()">2. Probar Notificación</button>
+        <button onclick="clearResults()">Limpiar Resultados</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function addResult(message, isSuccess = true) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${isSuccess ? 'success-result' : 'error-result'}`;
+            div.innerHTML = `<strong>${isSuccess ? '✅' : '❌'}</strong> ${message}`;
+            results.appendChild(div);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function testBackend() {
+            try {
+                addResult('Probando conexión al backend...', true);
+                const response = await fetch('http://localhost:8000');
+                const data = await response.json();
+                addResult(`Backend funcionando: ${data.message}`, true);
+            } catch (error) {
+                addResult(`Error conectando al backend: ${error.message}`, false);
+            }
+        }
+
+        async function testNotification() {
+            try {
+                addResult('Probando endpoint de notificaciones...', true);
+                const response = await fetch('http://localhost:8000/api/send-notification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: 'Test User',
+                        email: 'test@example.com',
+                        phone: '+1234567890',
+                        city: 'Lima',
+                        location: { latitude: -12.0464, longitude: -77.0428 }
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult(`Notificación enviada: ${data.message}`, true);
+                } else {
+                    const error = await response.text();
+                    addResult(`Error en notificación: ${response.status} - ${error}`, false);
+                }
+            } catch (error) {
+                addResult(`Error CORS: ${error.message}`, false);
+            }
+        }
+    </script>
+</body>
+</html>

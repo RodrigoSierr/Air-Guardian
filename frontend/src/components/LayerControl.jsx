@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layers, Satellite, MapPin } from 'lucide-react'
+import { Layers, Satellite, MapPin, TrendingUp } from 'lucide-react'
 import './LayerControl.css'
 
 const LayerControl = ({ layers, onToggleLayer }) => {
@@ -39,11 +39,24 @@ const LayerControl = ({ layers, onToggleLayer }) => {
               <Satellite size={16} />
               <span>TEMPO Satellite (NO₂)</span>
             </label>
+
+            <label className="layer-option">
+              <input
+                type="checkbox"
+                checked={layers.predictions}
+                onChange={() => onToggleLayer('predictions')}
+              />
+              <TrendingUp size={16} />
+              <span>Predicciones</span>
+            </label>
           </div>
 
           <div className="layer-info">
             <p className="info-text">
               <strong>TEMPO:</strong> NASA's satellite air quality data
+            </p>
+            <p className="info-text">
+              <strong>Predicciones:</strong> Análisis predictivo de calidad del aire
             </p>
           </div>
         </div>

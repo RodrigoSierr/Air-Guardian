@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_e42ae461d0f79a1e9d3c46103e7ecd11 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="position: fixed; 
+                bottom: 50px; left: 50px; width: 280px; height: 200px; 
+                background-color: white; border:2px solid grey; z-index:9999; 
+                font-size:14px; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+    <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Escenarios de Calidad del Aire</h4>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:blue; font-size: 16px;"></i> <strong>Datos Actuales</strong> (2020-2022)</p>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:red; font-size: 16px;"></i> <strong>Sin Acción</strong> (tendencia actual)</p>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:green; font-size: 16px;"></i> <strong>Política Verde</strong> (reducción)</p>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:orange; font-size: 16px;"></i> <strong>Crecimiento Urbano</strong> (aumento)</p>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:purple; font-size: 16px;"></i> <strong>Emergencia Climática</strong> (reducción drástica)</p>
+    <hr style="margin: 10px 0;">
+    <p style="margin: 5px 0; font-size: 12px; color: #7f8c8d;"><strong>Tamaño:</strong> Nivel de PM2.5</p>
+    </div>
+    
+    
+            <div class="folium-map" id="map_e42ae461d0f79a1e9d3c46103e7ecd11" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_e42ae461d0f79a1e9d3c46103e7ecd11 = L.map(
+                "map_e42ae461d0f79a1e9d3c46103e7ecd11",
+                {
+                    center: [39.8283, -98.5795],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 4,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_58eee2ad495499e2b8ff95d42c836ade = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_58eee2ad495499e2b8ff95d42c836ade.addTo(map_e42ae461d0f79a1e9d3c46103e7ecd11);
+        
+    
+            var feature_group_88b7f10353e70e1ef56d8fe844211e2a = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_cdfcad8edd5846bf2dae1a602dd0fc44 = L.circleMarker(
+                [32.9595, -117.1145],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_88b7f10353e70e1ef56d8fe844211e2a);
+        
+    
+        var popup_0c283aba77e751f4b53cad2571778012 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_f2ff96f3db3ac6ebdabc4587954934fe = $(`<div id="html_f2ff96f3db3ac6ebdabc4587954934fe" style="width: 100.0%; height: 100.0%;">                 <div style="width: 300px;">                     <h3 style="margin: 0; color: #2c3e50;">San Diego, CA</h3>                     <p style="margin: 5px 0;"><strong>Escenario:</strong> Datos Actuales (2020-2022)</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 7.25 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Predicciones:</strong> 1506</p>                 </div>                 </div>`)[0];
+                popup_0c283aba77e751f4b53cad2571778012.setContent(html_f2ff96f3db3ac6ebdabc4587954934fe);
+            
+        
+
+        circle_marker_cdfcad8edd5846bf2dae1a602dd0fc44.bindPopup(popup_0c283aba77e751f4b53cad2571778012)
+        ;
+
+        
+    
+    
+            feature_group_88b7f10353e70e1ef56d8fe844211e2a.addTo(map_e42ae461d0f79a1e9d3c46103e7ecd11);
+        
+    
+            var feature_group_94a1290c1a5cef2d85314e1bee68dcba = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_8a636d57a869dd4d444b0f90d789f34a = L.circleMarker(
+                [32.9595, -117.1145],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_94a1290c1a5cef2d85314e1bee68dcba);
+        
+    
+        var popup_9ca10516e41be849d7c559e68f9b132e = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_858352d583c6e9f04c7c4306c136c1dc = $(`<div id="html_858352d583c6e9f04c7c4306c136c1dc" style="width: 100.0%; height: 100.0%;">                 <div style="width: 300px;">                     <h3 style="margin: 0; color: #2c3e50;">San Diego, CA</h3>                     <p style="margin: 5px 0;"><strong>Escenario:</strong> Sin Acción</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 7.47 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Predicciones:</strong> 1080</p>                 </div>                 </div>`)[0];
+                popup_9ca10516e41be849d7c559e68f9b132e.setContent(html_858352d583c6e9f04c7c4306c136c1dc);
+            
+        
+
+        circle_marker_8a636d57a869dd4d444b0f90d789f34a.bindPopup(popup_9ca10516e41be849d7c559e68f9b132e)
+        ;
+
+        
+    
+    
+            feature_group_94a1290c1a5cef2d85314e1bee68dcba.addTo(map_e42ae461d0f79a1e9d3c46103e7ecd11);
+        
+    
+            var feature_group_aed2d169865d5fc02ee488e3a5c8f6b2 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_22dfa337dfac2b58c087a2176fc44bd0 = L.circleMarker(
+                [32.9595, -117.1145],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_aed2d169865d5fc02ee488e3a5c8f6b2);
+        
+    
+        var popup_f7ebaf61093540b2f906ff22c48a23b7 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_f36372ebd967991fd04bbfc0ed789c8a = $(`<div id="html_f36372ebd967991fd04bbfc0ed789c8a" style="width: 100.0%; height: 100.0%;">                 <div style="width: 300px;">                     <h3 style="margin: 0; color: #2c3e50;">San Diego, CA</h3>                     <p style="margin: 5px 0;"><strong>Escenario:</strong> Política Verde</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 4.69 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Predicciones:</strong> 1080</p>                 </div>                 </div>`)[0];
+                popup_f7ebaf61093540b2f906ff22c48a23b7.setContent(html_f36372ebd967991fd04bbfc0ed789c8a);
+            
+        
+
+        circle_marker_22dfa337dfac2b58c087a2176fc44bd0.bindPopup(popup_f7ebaf61093540b2f906ff22c48a23b7)
+        ;
+
+        
+    
+    
+            feature_group_aed2d169865d5fc02ee488e3a5c8f6b2.addTo(map_e42ae461d0f79a1e9d3c46103e7ecd11);
+        
+    
+            var feature_group_12cfada765ab49f7470c732e127a8aa0 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_163f729b42c863301408f6441d4daad8 = L.circleMarker(
+                [32.9595, -117.1145],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_12cfada765ab49f7470c732e127a8aa0);
+        
+    
+        var popup_61323c5823ab2228ce8d02b32770b68c = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_72150bc3396ff82fb9823ec376bd8a83 = $(`<div id="html_72150bc3396ff82fb9823ec376bd8a83" style="width: 100.0%; height: 100.0%;">                 <div style="width: 300px;">                     <h3 style="margin: 0; color: #2c3e50;">San Diego, CA</h3>                     <p style="margin: 5px 0;"><strong>Escenario:</strong> Crecimiento Urbano</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 10.55 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Predicciones:</strong> 1080</p>                 </div>                 </div>`)[0];
+                popup_61323c5823ab2228ce8d02b32770b68c.setContent(html_72150bc3396ff82fb9823ec376bd8a83);
+            
+        
+
+        circle_marker_163f729b42c863301408f6441d4daad8.bindPopup(popup_61323c5823ab2228ce8d02b32770b68c)
+        ;
+
+        
+    
+    
+            feature_group_12cfada765ab49f7470c732e127a8aa0.addTo(map_e42ae461d0f79a1e9d3c46103e7ecd11);
+        
+    
+            var feature_group_f661c63e28563f15c5fa9fb254d07796 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_5842d696b15bbf5c4020f6361b6594e3 = L.circleMarker(
+                [32.9595, -117.1145],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_f661c63e28563f15c5fa9fb254d07796);
+        
+    
+        var popup_b58d6a8d8bd09cd47b54cd85d2e17f2a = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_a058cccc79f048a8419b365c4fe434a0 = $(`<div id="html_a058cccc79f048a8419b365c4fe434a0" style="width: 100.0%; height: 100.0%;">                 <div style="width: 300px;">                     <h3 style="margin: 0; color: #2c3e50;">San Diego, CA</h3>                     <p style="margin: 5px 0;"><strong>Escenario:</strong> Emergencia Climática</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 2.47 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Predicciones:</strong> 1080</p>                 </div>                 </div>`)[0];
+                popup_b58d6a8d8bd09cd47b54cd85d2e17f2a.setContent(html_a058cccc79f048a8419b365c4fe434a0);
+            
+        
+
+        circle_marker_5842d696b15bbf5c4020f6361b6594e3.bindPopup(popup_b58d6a8d8bd09cd47b54cd85d2e17f2a)
+        ;
+
+        
+    
+    
+            feature_group_f661c63e28563f15c5fa9fb254d07796.addTo(map_e42ae461d0f79a1e9d3c46103e7ecd11);
+        
+    
+            var layer_control_edb44005f6d02bfb377d0434e09b7e32_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_58eee2ad495499e2b8ff95d42c836ade,
+                },
+                overlays :  {
+                    "Datos Actuales (2020-2022)" : feature_group_88b7f10353e70e1ef56d8fe844211e2a,
+                    "Sin Acci\u00f3n" : feature_group_94a1290c1a5cef2d85314e1bee68dcba,
+                    "Pol\u00edtica Verde" : feature_group_aed2d169865d5fc02ee488e3a5c8f6b2,
+                    "Crecimiento Urbano" : feature_group_12cfada765ab49f7470c732e127a8aa0,
+                    "Emergencia Clim\u00e1tica" : feature_group_f661c63e28563f15c5fa9fb254d07796,
+                },
+            };
+            let layer_control_edb44005f6d02bfb377d0434e09b7e32 = L.control.layers(
+                layer_control_edb44005f6d02bfb377d0434e09b7e32_layers.base_layers,
+                layer_control_edb44005f6d02bfb377d0434e09b7e32_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_e42ae461d0f79a1e9d3c46103e7ecd11);
+
+        
+</script>
+</html>

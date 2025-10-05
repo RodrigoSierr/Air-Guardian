@@ -1,0 +1,10 @@
+boto3
+pandas
+numpy
+scikit-learn
+xarray
+netCDF4
+joblib
+tqdm
+plotly
+folium

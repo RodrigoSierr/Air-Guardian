@@ -83,5 +83,30 @@ export const fetchForecast = async (stationId, hours = 48) => {
   }
 }
 
+export const fetchAdvancedForecast = async (stationId, currentData, hours = 48, scenario = 'tendencia_actual') => {
+  try {
+    const response = await api.post('/api/advanced/predict', {
+      station_id: stationId,
+      current_data: currentData,
+      hours_ahead: hours,
+      scenario: scenario
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error fetching advanced forecast:', error)
+    throw error
+  }
+}
+
+export const sendNotification = async (userData) => {
+  try {
+    const response = await api.post('/api/send-notification', userData)
+    return response.data
+  } catch (error) {
+    console.error('Error sending notification:', error)
+    throw error
+  }
+}
+
 export default api
 

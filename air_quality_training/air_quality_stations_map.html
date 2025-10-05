@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_4119acc78fafa83e5f0c59ff9e551afb {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="position: fixed; 
+                bottom: 50px; left: 50px; width: 200px; height: 120px; 
+                background-color: white; border:2px solid grey; z-index:9999; 
+                font-size:14px; padding: 10px">
+    <p><b>Calidad del Aire (PM2.5)</b></p>
+    <p><i class="fa fa-circle" style="color:green"></i> Buena (&lt;12)</p>
+    <p><i class="fa fa-circle" style="color:yellow"></i> Moderada (12-35)</p>
+    <p><i class="fa fa-circle" style="color:orange"></i> Insalubre (35-55)</p>
+    <p><i class="fa fa-circle" style="color:red"></i> Peligrosa (&gt;55)</p>
+    </div>
+    
+    
+            <div class="folium-map" id="map_4119acc78fafa83e5f0c59ff9e551afb" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_4119acc78fafa83e5f0c59ff9e551afb = L.map(
+                "map_4119acc78fafa83e5f0c59ff9e551afb",
+                {
+                    center: [39.8283, -98.5795],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 4,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_c033e64138f94aed048f03588ca4c2b8 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_c033e64138f94aed048f03588ca4c2b8.addTo(map_4119acc78fafa83e5f0c59ff9e551afb);
+        
+    
+            var circle_marker_a1a26cb0f8f05acca5dab6c3342c61ef = L.circleMarker(
+                [32.9595, -117.1145],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_4119acc78fafa83e5f0c59ff9e551afb);
+        
+    
+        var popup_dafac67899c18cba1d7d711d95696901 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_64c99946c81510aca8361db9bcbce237 = $(`<div id="html_64c99946c81510aca8361db9bcbce237" style="width: 100.0%; height: 100.0%;">         <b>San Diego, CA</b><br>         <b>Estación ID:</b> 2178<br>         <b>PM2.5 Promedio:</b> 7.25 μg/m³<br>         <b>Calidad del Aire:</b> Buena<br>         <b>Predicciones:</b> 1506         </div>`)[0];
+                popup_dafac67899c18cba1d7d711d95696901.setContent(html_64c99946c81510aca8361db9bcbce237);
+            
+        
+
+        circle_marker_a1a26cb0f8f05acca5dab6c3342c61ef.bindPopup(popup_dafac67899c18cba1d7d711d95696901)
+        ;
+
+        
+    
+</script>
+</html>

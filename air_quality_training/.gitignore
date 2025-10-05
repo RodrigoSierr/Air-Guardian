@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# VS Code
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data files (opcional, comenta si quieres incluir los datos)
+*.csv
+*.csv.gz
+*.nc
+
+# Model files (opcional, comenta si quieres incluir los modelos)
+*.pkl
+
+# Logs
+*.log

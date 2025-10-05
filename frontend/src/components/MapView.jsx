@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaf
 import { getAQIColor, getAQICategory } from '../utils/aqi'
 import TempoHeatmap from './TempoHeatmap'
 import LayerControl from './LayerControl'
+import PredictionLayer from './PredictionLayer'
+import AnalysisModal from './AnalysisModal'
 import 'leaflet/dist/leaflet.css'
 import './MapView.css'
 
@@ -25,14 +27,27 @@ const MapView = ({ stations, selectedStation, onStationSelect }) => {
   const mapRef = useRef(null)
   const [layers, setLayers] = useState({
     stations: true,
-    tempo: false
+    tempo: false,
+    predictions: false
   })
+  const [analysisModalOpen, setAnalysisModalOpen] = useState(false)
+  const [analysisData, setAnalysisData] = useState(null)
 
   const handleToggleLayer = (layerName) => {
     setLayers(prev => ({
       ...prev,
       [layerName]: !prev[layerName]
     }))
+  }
+
+  const handleAnalysisClick = (data) => {
+    setAnalysisData(data)
+    setAnalysisModalOpen(true)
+  }
+
+  const handleCloseAnalysis = () => {
+    setAnalysisModalOpen(false)
+    setAnalysisData(null)
   }
 
   return (
@@ -54,6 +69,15 @@ const MapView = ({ stations, selectedStation, onStationSelect }) => {
 
         {/* TEMPO satellite heatmap */}
         <TempoHeatmap visible={layers.tempo} parameter="no2" />
+
+        {/* Prediction layer */}
+        {layers.predictions && selectedStation && (
+          <PredictionLayer 
+            station={selectedStation}
+            visible={layers.predictions}
+            onAnalysisClick={handleAnalysisClick}
+          />
+        )}
 
         {/* Station markers */}
         {layers.stations && stations.map((station) => {
@@ -103,6 +127,13 @@ const MapView = ({ stations, selectedStation, onStationSelect }) => {
 
         <MapUpdater selectedStation={selectedStation} />
       </MapContainer>
+
+      {/* Analysis Modal */}
+      <AnalysisModal 
+        isOpen={analysisModalOpen}
+        onClose={handleCloseAnalysis}
+        analysisData={analysisData}
+      />
 
       {/* AQI Legend */}
       <div className="map-legend">

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_52eaa2b522645a27e0ac6d3380dc3171 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="position: fixed; 
+                bottom: 50px; left: 50px; width: 320px; height: 180px; 
+                background-color: white; border:2px solid grey; z-index:9999; 
+                font-size:14px; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+    <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Comparación Histórico vs Predicciones</h4>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:blue; font-size: 16px;"></i> <strong>Histórico (2020)</strong> - Datos reales</p>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:red; font-size: 16px;"></i> <strong>Predicción Actual (2023-2024)</strong> - Sin acciones</p>
+    <hr style="margin: 10px 0;">
+    <p style="margin: 5px 0; font-size: 12px; color: #7f8c8d;"><strong>Tamaño:</strong> Nivel de PM2.5 | <strong>Comparación:</strong> Impacto de no tomar acciones</p>
+    </div>
+    
+    
+            <div class="folium-map" id="map_52eaa2b522645a27e0ac6d3380dc3171" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_52eaa2b522645a27e0ac6d3380dc3171 = L.map(
+                "map_52eaa2b522645a27e0ac6d3380dc3171",
+                {
+                    center: [39.8283, -98.5795],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 4,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_ce74b9c88f8a3d6a92f4b1fd280bdedd = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_ce74b9c88f8a3d6a92f4b1fd280bdedd.addTo(map_52eaa2b522645a27e0ac6d3380dc3171);
+        
+    
+            var feature_group_2eeb9eab51e9eed8ad93e16e274b17a1 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_7de627b79ecbf5450c0ab7200eadf74e = L.circleMarker(
+                [29.7604, -95.3698],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_2eeb9eab51e9eed8ad93e16e274b17a1);
+        
+    
+        var popup_ba08a701c76535c4b79aa57efc2c95b0 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_f5ea143002fb63dc3e0b107bb48d7bb8 = $(`<div id="html_f5ea143002fb63dc3e0b107bb48d7bb8" style="width: 100.0%; height: 100.0%;">                 <div style="width: 350px;">                     <h3 style="margin: 0; color: #2c3e50;">Houston, TX</h3>                     <p style="margin: 5px 0;"><strong>Período:</strong> Histórico (2020)</p>                     <p style="margin: 5px 0;"><strong>Región:</strong> Sur</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 10.88 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Registros:</strong> 1506</p>                 </div>                 </div>`)[0];
+                popup_ba08a701c76535c4b79aa57efc2c95b0.setContent(html_f5ea143002fb63dc3e0b107bb48d7bb8);
+            
+        
+
+        circle_marker_7de627b79ecbf5450c0ab7200eadf74e.bindPopup(popup_ba08a701c76535c4b79aa57efc2c95b0)
+        ;
+
+        
+    
+    
+            var circle_marker_0f3f7b86ff75d94e8f4d75466478070c = L.circleMarker(
+                [41.8781, -87.6298],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_2eeb9eab51e9eed8ad93e16e274b17a1);
+        
+    
+        var popup_083d38e1885609ec060c4d1234de1302 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_b59eeaa9ecb1f2c8b717437e3c42c22e = $(`<div id="html_b59eeaa9ecb1f2c8b717437e3c42c22e" style="width: 100.0%; height: 100.0%;">                 <div style="width: 350px;">                     <h3 style="margin: 0; color: #2c3e50;">Chicago, IL</h3>                     <p style="margin: 5px 0;"><strong>Período:</strong> Histórico (2020)</p>                     <p style="margin: 5px 0;"><strong>Región:</strong> Centro</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 9.43 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Registros:</strong> 1506</p>                 </div>                 </div>`)[0];
+                popup_083d38e1885609ec060c4d1234de1302.setContent(html_b59eeaa9ecb1f2c8b717437e3c42c22e);
+            
+        
+
+        circle_marker_0f3f7b86ff75d94e8f4d75466478070c.bindPopup(popup_083d38e1885609ec060c4d1234de1302)
+        ;
+
+        
+    
+    
+            var circle_marker_96a0e8107e042b4b452ecb5d38ebc9f0 = L.circleMarker(
+                [40.7128, -74.006],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_2eeb9eab51e9eed8ad93e16e274b17a1);
+        
+    
+        var popup_437ab8e5f7003ee237da87a0b5ed435a = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_90ee9bf671e2340e994dcc4517d0cd70 = $(`<div id="html_90ee9bf671e2340e994dcc4517d0cd70" style="width: 100.0%; height: 100.0%;">                 <div style="width: 350px;">                     <h3 style="margin: 0; color: #2c3e50;">New York, NY</h3>                     <p style="margin: 5px 0;"><strong>Período:</strong> Histórico (2020)</p>                     <p style="margin: 5px 0;"><strong>Región:</strong> Costa Este</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 8.70 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Registros:</strong> 1506</p>                 </div>                 </div>`)[0];
+                popup_437ab8e5f7003ee237da87a0b5ed435a.setContent(html_90ee9bf671e2340e994dcc4517d0cd70);
+            
+        
+
+        circle_marker_96a0e8107e042b4b452ecb5d38ebc9f0.bindPopup(popup_437ab8e5f7003ee237da87a0b5ed435a)
+        ;
+
+        
+    
+    
+            var circle_marker_1f51ae5643bc9c78dc4d805cdf2a530e = L.circleMarker(
+                [34.0522, -118.2437],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_2eeb9eab51e9eed8ad93e16e274b17a1);
+        
+    
+        var popup_3ab5ef16ae93a7f115f94418b363f3c2 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_fceee61adb6159136375cf5f7fadf27a = $(`<div id="html_fceee61adb6159136375cf5f7fadf27a" style="width: 100.0%; height: 100.0%;">                 <div style="width: 350px;">                     <h3 style="margin: 0; color: #2c3e50;">Los Angeles, CA</h3>                     <p style="margin: 5px 0;"><strong>Período:</strong> Histórico (2020)</p>                     <p style="margin: 5px 0;"><strong>Región:</strong> Costa Oeste</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 7.25 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Registros:</strong> 1506</p>                 </div>                 </div>`)[0];
+                popup_3ab5ef16ae93a7f115f94418b363f3c2.setContent(html_fceee61adb6159136375cf5f7fadf27a);
+            
+        
+
+        circle_marker_1f51ae5643bc9c78dc4d805cdf2a530e.bindPopup(popup_3ab5ef16ae93a7f115f94418b363f3c2)
+        ;
+
+        
+    
+    
+            var circle_marker_979e8d772d56db69468bd38f0acf7ea2 = L.circleMarker(
+                [32.9595, -117.1145],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_2eeb9eab51e9eed8ad93e16e274b17a1);
+        
+    
+        var popup_ff1b8264eab53d6870b788d1a8ab8079 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_fb8867c27ba5b84aa4e980dd7698d6b6 = $(`<div id="html_fb8867c27ba5b84aa4e980dd7698d6b6" style="width: 100.0%; height: 100.0%;">                 <div style="width: 350px;">                     <h3 style="margin: 0; color: #2c3e50;">San Diego, CA</h3>                     <p style="margin: 5px 0;"><strong>Período:</strong> Histórico (2020)</p>                     <p style="margin: 5px 0;"><strong>Región:</strong> Costa Oeste</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 7.25 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Registros:</strong> 1506</p>                 </div>                 </div>`)[0];
+                popup_ff1b8264eab53d6870b788d1a8ab8079.setContent(html_fb8867c27ba5b84aa4e980dd7698d6b6);
+            
+        
+
+        circle_marker_979e8d772d56db69468bd38f0acf7ea2.bindPopup(popup_ff1b8264eab53d6870b788d1a8ab8079)
+        ;
+
+        
+    
+    
+            feature_group_2eeb9eab51e9eed8ad93e16e274b17a1.addTo(map_52eaa2b522645a27e0ac6d3380dc3171);
+        
+    
+            var feature_group_d22bc6945bd59661efb79853dd546219 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_54946c3cc1673cc12488aa017d19b77a = L.circleMarker(
+                [29.7604, -95.3698],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_d22bc6945bd59661efb79853dd546219);
+        
+    
+        var popup_cab9c3812334dfb7574be13de45ede32 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_7226e5dd6b4ea515be005b47bf54a4a3 = $(`<div id="html_7226e5dd6b4ea515be005b47bf54a4a3" style="width: 100.0%; height: 100.0%;">                 <div style="width: 350px;">                     <h3 style="margin: 0; color: #2c3e50;">Houston, TX</h3>                     <p style="margin: 5px 0;"><strong>Período:</strong> Predicción Actual (2023-2024)</p>                     <p style="margin: 5px 0;"><strong>Región:</strong> Sur</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 11.19 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Registros:</strong> 17521</p>                 </div>                 </div>`)[0];
+                popup_cab9c3812334dfb7574be13de45ede32.setContent(html_7226e5dd6b4ea515be005b47bf54a4a3);
+            
+        
+
+        circle_marker_54946c3cc1673cc12488aa017d19b77a.bindPopup(popup_cab9c3812334dfb7574be13de45ede32)
+        ;
+
+        
+    
+    
+            var circle_marker_77141407c5b4a927e6322d1a5cf57a9c = L.circleMarker(
+                [41.8781, -87.6298],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_d22bc6945bd59661efb79853dd546219);
+        
+    
+        var popup_fee2fad992a3c352ade74a335bdc8107 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_1cc7e54fcc562cabd84ee7c84487fd66 = $(`<div id="html_1cc7e54fcc562cabd84ee7c84487fd66" style="width: 100.0%; height: 100.0%;">                 <div style="width: 350px;">                     <h3 style="margin: 0; color: #2c3e50;">Chicago, IL</h3>                     <p style="margin: 5px 0;"><strong>Período:</strong> Predicción Actual (2023-2024)</p>                     <p style="margin: 5px 0;"><strong>Región:</strong> Centro</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 9.71 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Registros:</strong> 17521</p>                 </div>                 </div>`)[0];
+                popup_fee2fad992a3c352ade74a335bdc8107.setContent(html_1cc7e54fcc562cabd84ee7c84487fd66);
+            
+        
+
+        circle_marker_77141407c5b4a927e6322d1a5cf57a9c.bindPopup(popup_fee2fad992a3c352ade74a335bdc8107)
+        ;
+
+        
+    
+    
+            var circle_marker_959e4c3fd3d1cd54268222b893d8f34f = L.circleMarker(
+                [40.7128, -74.006],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_d22bc6945bd59661efb79853dd546219);
+        
+    
+        var popup_5266abfcd9260a5ad747df43e442651d = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_a9282c57d1aef9ea0b3f2613a8b14c48 = $(`<div id="html_a9282c57d1aef9ea0b3f2613a8b14c48" style="width: 100.0%; height: 100.0%;">                 <div style="width: 350px;">                     <h3 style="margin: 0; color: #2c3e50;">New York, NY</h3>                     <p style="margin: 5px 0;"><strong>Período:</strong> Predicción Actual (2023-2024)</p>                     <p style="margin: 5px 0;"><strong>Región:</strong> Costa Este</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 8.96 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Registros:</strong> 17521</p>                 </div>                 </div>`)[0];
+                popup_5266abfcd9260a5ad747df43e442651d.setContent(html_a9282c57d1aef9ea0b3f2613a8b14c48);
+            
+        
+
+        circle_marker_959e4c3fd3d1cd54268222b893d8f34f.bindPopup(popup_5266abfcd9260a5ad747df43e442651d)
+        ;
+
+        
+    
+    
+            var circle_marker_f172a54678fede0a426c2f0a53eae05c = L.circleMarker(
+                [34.0522, -118.2437],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_d22bc6945bd59661efb79853dd546219);
+        
+    
+        var popup_e8afd23cd341c8379e5cac2114b79faf = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_51e7f2931fd7ac746d78f2f8d113f07b = $(`<div id="html_51e7f2931fd7ac746d78f2f8d113f07b" style="width: 100.0%; height: 100.0%;">                 <div style="width: 350px;">                     <h3 style="margin: 0; color: #2c3e50;">Los Angeles, CA</h3>                     <p style="margin: 5px 0;"><strong>Período:</strong> Predicción Actual (2023-2024)</p>                     <p style="margin: 5px 0;"><strong>Región:</strong> Costa Oeste</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 7.46 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Registros:</strong> 17521</p>                 </div>                 </div>`)[0];
+                popup_e8afd23cd341c8379e5cac2114b79faf.setContent(html_51e7f2931fd7ac746d78f2f8d113f07b);
+            
+        
+
+        circle_marker_f172a54678fede0a426c2f0a53eae05c.bindPopup(popup_e8afd23cd341c8379e5cac2114b79faf)
+        ;
+
+        
+    
+    
+            var circle_marker_88a273a326f037dd1889aa3706a55c28 = L.circleMarker(
+                [32.9595, -117.1145],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(feature_group_d22bc6945bd59661efb79853dd546219);
+        
+    
+        var popup_aa217141b512a9dbc4d0dd59fc6de021 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_b10c6433d0e05226c4ab22cabc8d134f = $(`<div id="html_b10c6433d0e05226c4ab22cabc8d134f" style="width: 100.0%; height: 100.0%;">                 <div style="width: 350px;">                     <h3 style="margin: 0; color: #2c3e50;">San Diego, CA</h3>                     <p style="margin: 5px 0;"><strong>Período:</strong> Predicción Actual (2023-2024)</p>                     <p style="margin: 5px 0;"><strong>Región:</strong> Costa Oeste</p>                     <p style="margin: 5px 0;"><strong>PM2.5 Promedio:</strong> 7.44 μg/m³</p>                     <p style="margin: 5px 0;"><strong>Calidad:</strong> Buena</p>                     <p style="margin: 5px 0;"><strong>Registros:</strong> 17521</p>                 </div>                 </div>`)[0];
+                popup_aa217141b512a9dbc4d0dd59fc6de021.setContent(html_b10c6433d0e05226c4ab22cabc8d134f);
+            
+        
+
+        circle_marker_88a273a326f037dd1889aa3706a55c28.bindPopup(popup_aa217141b512a9dbc4d0dd59fc6de021)
+        ;
+
+        
+    
+    
+            feature_group_d22bc6945bd59661efb79853dd546219.addTo(map_52eaa2b522645a27e0ac6d3380dc3171);
+        
+    
+            var layer_control_3c6bb0ce132e72bcbcf9fd069935c92e_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_ce74b9c88f8a3d6a92f4b1fd280bdedd,
+                },
+                overlays :  {
+                    "Hist\u00f3rico (2020)" : feature_group_2eeb9eab51e9eed8ad93e16e274b17a1,
+                    "Predicci\u00f3n Actual (2023-2024)" : feature_group_d22bc6945bd59661efb79853dd546219,
+                },
+            };
+            let layer_control_3c6bb0ce132e72bcbcf9fd069935c92e = L.control.layers(
+                layer_control_3c6bb0ce132e72bcbcf9fd069935c92e_layers.base_layers,
+                layer_control_3c6bb0ce132e72bcbcf9fd069935c92e_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_52eaa2b522645a27e0ac6d3380dc3171);
+
+        
+</script>
+</html>

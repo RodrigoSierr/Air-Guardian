@@ -3,6 +3,7 @@ import MapView from './components/MapView'
 import Sidebar from './components/Sidebar'
 import DetailPanel from './components/DetailPanel'
 import Header from './components/Header'
+import UserModal from './components/UserModal'
 import { fetchStations, fetchStationsByCountry } from './services/api'
 import './App.css'
 
@@ -12,6 +13,8 @@ function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [userLocation, setUserLocation] = useState(null)
 
   useEffect(() => {
     loadStations()
@@ -61,9 +64,22 @@ function App() {
     setSelectedStation(null)
   }
 
+  const handleNotificationClick = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleLocationObtained = (location) => {
+    setUserLocation(location)
+  }
+
+  const handleModalClose = () => {
+    setIsModalOpen(false)
+    setUserLocation(null)
+  }
+
   return (
     <div className="app">
-      <Header />
+      <Header onNotificationClick={handleNotificationClick} />
       
       <div className="app-content">
         <Sidebar
@@ -90,6 +106,13 @@ function App() {
           />
         )}
       </div>
+
+      <UserModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onLocationObtained={handleLocationObtained}
+        userLocation={userLocation}
+      />
     </div>
   )
 }

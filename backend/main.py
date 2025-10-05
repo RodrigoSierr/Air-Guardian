@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from datetime import datetime, timedelta
 import asyncio
 from config import OPENAQ_API_KEY, CORS_ORIGINS, OPENWEATHER_API_KEY
+from email_service_fixed import email_service
 
 load_dotenv()
 
@@ -16,9 +17,9 @@ app = FastAPI(title="AirGuardian API", version="1.0.0")
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173", "http://127.0.0.1:3000"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -50,6 +51,13 @@ class WeatherData(BaseModel):
     wind_speed: float
     wind_direction: int
     pressure: float
+
+class NotificationRequest(BaseModel):
+    name: str
+    phone: str
+    email: str
+    location: dict
+    city: str
 
 # Helper functions
 def calculate_aqi_pm25(pm25: float) -> int:
@@ -471,13 +479,68 @@ async def get_station_history(station_id: str, days: int = 7):
     
     return {"station_id": station_id, "data": history}
 
+@app.options("/api/send-notification")
+async def options_send_notification():
+    """Handle CORS preflight requests"""
+    return {"message": "OK"}
+
+@app.post("/api/test-simple")
+async def test_simple():
+    """Simple test endpoint"""
+    return {"message": "Test successful", "status": "ok"}
+
+@app.post("/api/send-notification")
+async def send_notification(request: NotificationRequest):
+    """Send personalized air quality notification email"""
+    try:
+        print(f"Recibida solicitud de notificacion:")
+        print(f"   - Nombre: {request.name}")
+        print(f"   - Email: {request.email}")
+        print(f"   - Telefono: {request.phone}")
+        print(f"   - Ciudad: {request.city}")
+        print(f"   - Ubicacion: {request.location}")
+        
+        # Validate request data
+        if not request.email or not request.name:
+            print("Datos de solicitud invalidos")
+            raise HTTPException(status_code=400, detail="Email y nombre son requeridos")
+        
+        success = await email_service.send_notification({
+            "name": request.name,
+            "email": request.email,
+            "phone": request.phone,
+            "location": request.location,
+            "city": request.city
+        })
+        
+        if success:
+            print("Notificacion enviada exitosamente")
+            return {"message": "Notificacion enviada exitosamente", "status": "success"}
+        else:
+            print("Fallo al enviar notificacion")
+            raise HTTPException(status_code=500, detail="Error al enviar la notificacion. Revisa los logs del servidor.")
+            
+    except HTTPException:
+        # Re-raise HTTP exceptions
+        raise
+    except Exception as e:
+        print(f"Error inesperado en endpoint: {e}")
+        print(f"Tipo de error: {type(e).__name__}")
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+
 # Include prediction endpoints
 from predict_api import router as predict_router
+from simple_advanced_api import router as advanced_router
+from prediction_layer_api import router as prediction_layer_router
+from prediction_charts_api import router as prediction_charts_router
 app.include_router(predict_router)
 
 # Include TEMPO satellite data endpoints
 from tempo_api import router as tempo_router
 app.include_router(tempo_router)
+app.include_router(advanced_router)
+app.include_router(prediction_layer_router)
+app.include_router(prediction_charts_router)
 
 if __name__ == "__main__":
     import uvicorn

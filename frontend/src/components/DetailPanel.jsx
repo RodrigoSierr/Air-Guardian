@@ -3,7 +3,7 @@ import { X, TrendingUp, Wind, Droplets, Thermometer, Gauge, Calendar } from 'luc
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart } from 'recharts'
 import { format, parseISO } from 'date-fns'
 import { getAQIColor, getAQICategory, getAQIDescription } from '../utils/aqi'
-import { fetchStationHistory, fetchWeather, fetchForecast } from '../services/api'
+import { fetchStationHistory, fetchWeather, fetchForecast, fetchAdvancedForecast } from '../services/api'
 import './DetailPanel.css'
 
 const DetailPanel = ({ station, onClose }) => {
@@ -23,15 +23,41 @@ const DetailPanel = ({ station, onClose }) => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const [history, weather, forecast] = await Promise.all([
+      const [history, weather] = await Promise.all([
         fetchStationHistory(station.station_id, historyPeriod),
-        fetchWeather(station.latitude, station.longitude),
-        fetchForecast(station.station_id, 48)
+        fetchWeather(station.latitude, station.longitude)
       ])
       
       setHistoryData(history)
       setWeatherData(weather)
-      setForecastData(forecast)
+      
+      // Usar predicciones avanzadas con datos actuales de la estación
+      const currentData = {
+        PM2_5: station.pollutants?.pm25 || 30,
+        PM10: station.pollutants?.pm10 || 45,
+        NO2: station.pollutants?.no2 || 40,
+        O3: station.pollutants?.o3 || 50,
+        SO2: station.pollutants?.so2 || 5,
+        temperature: weather?.temperature || 20,
+        humidity: weather?.humidity || 60,
+        wind_speed: weather?.wind_speed || 5,
+        pressure: weather?.pressure || 1013
+      }
+      
+      try {
+        const advancedForecast = await fetchAdvancedForecast(
+          station.station_id, 
+          currentData, 
+          48, 
+          'tendencia_actual'
+        )
+        setForecastData(advancedForecast)
+      } catch (forecastError) {
+        console.error('Error fetching advanced forecast, falling back to basic:', forecastError)
+        // Fallback al forecast básico si falla el avanzado
+        const basicForecast = await fetchForecast(station.station_id, 48)
+        setForecastData(basicForecast)
+      }
     } catch (error) {
       console.error('Error loading detail data:', error)
     } finally {
@@ -233,13 +259,25 @@ const DetailPanel = ({ station, onClose }) => {
       return <div className="loading-section">Loading forecast...</div>
     }
 
-    if (!forecastData || !forecastData.forecast) {
+    if (!forecastData) {
       return <div className="no-data-section">No forecast data available</div>
     }
 
-    const chartData = forecastData.forecast.map(item => ({
+    // Manejar datos avanzados o básicos
+    let forecastItems = []
+    if (forecastData.predictions && forecastData.predictions.tendencia_actual) {
+      // Datos avanzados
+      forecastItems = forecastData.predictions.tendencia_actual
+    } else if (forecastData.forecast) {
+      // Datos básicos
+      forecastItems = forecastData.forecast
+    } else {
+      return <div className="no-data-section">No forecast data available</div>
+    }
+
+    const chartData = forecastItems.map(item => ({
       time: format(parseISO(item.timestamp), 'MMM dd HH:mm'),
-      aqi: item.aqi,
+      aqi: item.predictions?.AQI || item.aqi,
       confidence: (item.confidence || 0.8) * 100,
     }))
 

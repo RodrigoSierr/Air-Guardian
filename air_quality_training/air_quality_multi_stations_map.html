@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_4b6df10f278f8e9ffc3e9fba76726985 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="position: fixed; 
+                bottom: 50px; left: 50px; width: 250px; height: 180px; 
+                background-color: white; border:2px solid grey; z-index:9999; 
+                font-size:14px; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+    <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Calidad del Aire (PM2.5)</h4>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:green; font-size: 16px;"></i> <strong>Buena</strong> (&lt;12 μg/m³)</p>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:yellow; font-size: 16px;"></i> <strong>Moderada</strong> (12-35 μg/m³)</p>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:orange; font-size: 16px;"></i> <strong>Insalubre</strong> (35-55 μg/m³)</p>
+    <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:red; font-size: 16px;"></i> <strong>Peligrosa</strong> (&gt;55 μg/m³)</p>
+    <hr style="margin: 10px 0;">
+    <p style="margin: 5px 0; font-size: 12px; color: #7f8c8d;"><strong>Tamaño del círculo:</strong> Nivel de contaminación</p>
+    </div>
+    
+    
+    <div style="position: fixed; 
+                top: 10px; left: 50%; transform: translateX(-50%); 
+                background-color: white; border:2px solid grey; z-index:9999; 
+                font-size:16px; padding: 10px 20px; border-radius: 10px; 
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2); text-align: center;">
+    <h3 style="margin: 0; color: #2c3e50;">🌍 Mapa de Calidad del Aire - EE.UU.</h3>
+    <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 14px;">Predicciones basadas en datos de OpenAQ + NASA EarthData</p>
+    </div>
+    
+    
+            <div class="folium-map" id="map_4b6df10f278f8e9ffc3e9fba76726985" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_4b6df10f278f8e9ffc3e9fba76726985 = L.map(
+                "map_4b6df10f278f8e9ffc3e9fba76726985",
+                {
+                    center: [39.8283, -98.5795],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 4,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_d8eaa27857422d4685592589b5a84435 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_d8eaa27857422d4685592589b5a84435.addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var circle_marker_d6dd9f2b14ec9f2fbdfd91bc503609d5 = L.circleMarker(
+                [42.3601, -71.0589],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+        var popup_04f48be52cb6f89c57279ba18365adc1 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_97a3a22a617f517234b09c774b283008 = $(`<div id="html_97a3a22a617f517234b09c774b283008" style="width: 100.0%; height: 100.0%;">         <div style="width: 300px;">             <h3 style="margin: 0; color: #2c3e50;">Boston, MA</h3>             <p style="margin: 5px 0;"><strong>Estación ID:</strong> 2069</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Calidad del Aire</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Promedio:</strong> 7.43 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM2.5 Máximo:</strong> 64.20 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM10 Promedio:</strong> 25.13 μg/m³</p>             <p style="margin: 2px 0;"><strong>NO₂ Promedio:</strong> 0.0153 ppm</p>             <p style="margin: 2px 0;"><strong>O₃ Promedio:</strong> 0.0211 ppm</p>             <p style="margin: 2px 0;"><strong>SO₂ Promedio:</strong> 0.000352 ppm</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Datos Satelitales</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Satelital:</strong> 10.16 μg/m³</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Estadísticas</h4>             <p style="margin: 2px 0;"><strong>Predicciones:</strong> 753</p>             <p style="margin: 2px 0;"><strong>Nivel:</strong> <span style="color: green;">Buena</span></p>         </div>         </div>`)[0];
+                popup_04f48be52cb6f89c57279ba18365adc1.setContent(html_97a3a22a617f517234b09c774b283008);
+            
+        
+
+        circle_marker_d6dd9f2b14ec9f2fbdfd91bc503609d5.bindPopup(popup_04f48be52cb6f89c57279ba18365adc1)
+        ;
+
+        
+    
+    
+            var marker_0ad8e70bbbc45667856ebfa9dbd018d1 = L.marker(
+                [42.3601, -71.0589],
+                {
+}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var div_icon_6116cb87b8efeb240c6436c8027b649e = L.divIcon({
+  "html": "\u003cdiv style=\"font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; background: white; padding: 2px 4px; border-radius: 3px; border: 1px solid #bdc3c7;\"\u003eBoston\u003c/div\u003e",
+  "iconSize": [50, 20],
+  "iconAnchor": [25, 10],
+  "className": "empty",
+});
+        
+    
+                marker_0ad8e70bbbc45667856ebfa9dbd018d1.setIcon(div_icon_6116cb87b8efeb240c6436c8027b649e);
+            
+    
+            var circle_marker_432b00d0612a531588179ae71e83934e = L.circleMarker(
+                [47.6062, -122.3321],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+        var popup_438c267578a1b59c0a48dacb37f33b70 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_86c40919632213ea7e7ed949b4bd1978 = $(`<div id="html_86c40919632213ea7e7ed949b4bd1978" style="width: 100.0%; height: 100.0%;">         <div style="width: 300px;">             <h3 style="margin: 0; color: #2c3e50;">Seattle, WA</h3>             <p style="margin: 5px 0;"><strong>Estación ID:</strong> 2080</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Calidad del Aire</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Promedio:</strong> 5.20 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM2.5 Máximo:</strong> 44.94 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM10 Promedio:</strong> 18.27 μg/m³</p>             <p style="margin: 2px 0;"><strong>NO₂ Promedio:</strong> 0.0106 ppm</p>             <p style="margin: 2px 0;"><strong>O₃ Promedio:</strong> 0.0209 ppm</p>             <p style="margin: 2px 0;"><strong>SO₂ Promedio:</strong> 0.000349 ppm</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Datos Satelitales</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Satelital:</strong> 10.02 μg/m³</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Estadísticas</h4>             <p style="margin: 2px 0;"><strong>Predicciones:</strong> 753</p>             <p style="margin: 2px 0;"><strong>Nivel:</strong> <span style="color: green;">Buena</span></p>         </div>         </div>`)[0];
+                popup_438c267578a1b59c0a48dacb37f33b70.setContent(html_86c40919632213ea7e7ed949b4bd1978);
+            
+        
+
+        circle_marker_432b00d0612a531588179ae71e83934e.bindPopup(popup_438c267578a1b59c0a48dacb37f33b70)
+        ;
+
+        
+    
+    
+            var marker_bf41f6c2e189c2d200533ed5f0795bce = L.marker(
+                [47.6062, -122.3321],
+                {
+}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var div_icon_8a4bce50add71e5bed0199937ab0bbd5 = L.divIcon({
+  "html": "\u003cdiv style=\"font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; background: white; padding: 2px 4px; border-radius: 3px; border: 1px solid #bdc3c7;\"\u003eSeattle\u003c/div\u003e",
+  "iconSize": [50, 20],
+  "iconAnchor": [25, 10],
+  "className": "empty",
+});
+        
+    
+                marker_bf41f6c2e189c2d200533ed5f0795bce.setIcon(div_icon_8a4bce50add71e5bed0199937ab0bbd5);
+            
+    
+            var circle_marker_6a627207a7a6d69577a527ea103938bd = L.circleMarker(
+                [25.7617, -80.1918],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+        var popup_faef2f67cadc4a0ab6b26096b3ed5224 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_cc68075f7e029504556eb06b5d76ed90 = $(`<div id="html_cc68075f7e029504556eb06b5d76ed90" style="width: 100.0%; height: 100.0%;">         <div style="width: 300px;">             <h3 style="margin: 0; color: #2c3e50;">Miami, FL</h3>             <p style="margin: 5px 0;"><strong>Estación ID:</strong> 2091</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Calidad del Aire</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Promedio:</strong> 6.69 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM2.5 Máximo:</strong> 57.78 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM10 Promedio:</strong> 18.27 μg/m³</p>             <p style="margin: 2px 0;"><strong>NO₂ Promedio:</strong> 0.0141 ppm</p>             <p style="margin: 2px 0;"><strong>O₃ Promedio:</strong> 0.0212 ppm</p>             <p style="margin: 2px 0;"><strong>SO₂ Promedio:</strong> 0.000351 ppm</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Datos Satelitales</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Satelital:</strong> 9.94 μg/m³</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Estadísticas</h4>             <p style="margin: 2px 0;"><strong>Predicciones:</strong> 753</p>             <p style="margin: 2px 0;"><strong>Nivel:</strong> <span style="color: green;">Buena</span></p>         </div>         </div>`)[0];
+                popup_faef2f67cadc4a0ab6b26096b3ed5224.setContent(html_cc68075f7e029504556eb06b5d76ed90);
+            
+        
+
+        circle_marker_6a627207a7a6d69577a527ea103938bd.bindPopup(popup_faef2f67cadc4a0ab6b26096b3ed5224)
+        ;
+
+        
+    
+    
+            var marker_dfd5bf3c19bc40e4338638678c69cb2b = L.marker(
+                [25.7617, -80.1918],
+                {
+}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var div_icon_04973207aabb39c11201d374a22fe55c = L.divIcon({
+  "html": "\u003cdiv style=\"font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; background: white; padding: 2px 4px; border-radius: 3px; border: 1px solid #bdc3c7;\"\u003eMiami\u003c/div\u003e",
+  "iconSize": [50, 20],
+  "iconAnchor": [25, 10],
+  "className": "empty",
+});
+        
+    
+                marker_dfd5bf3c19bc40e4338638678c69cb2b.setIcon(div_icon_04973207aabb39c11201d374a22fe55c);
+            
+    
+            var circle_marker_363deea767a812bc9462af9a487e2b57 = L.circleMarker(
+                [39.7392, -104.9903],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+        var popup_42eaef4c7004824927222fd573dfe2dd = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_0dd2814602646b9c2ad01e1675ce16b8 = $(`<div id="html_0dd2814602646b9c2ad01e1675ce16b8" style="width: 100.0%; height: 100.0%;">         <div style="width: 300px;">             <h3 style="margin: 0; color: #2c3e50;">Denver, CO</h3>             <p style="margin: 5px 0;"><strong>Estación ID:</strong> 2102</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Calidad del Aire</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Promedio:</strong> 5.94 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM2.5 Máximo:</strong> 51.36 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM10 Promedio:</strong> 20.56 μg/m³</p>             <p style="margin: 2px 0;"><strong>NO₂ Promedio:</strong> 0.0082 ppm</p>             <p style="margin: 2px 0;"><strong>O₃ Promedio:</strong> 0.0213 ppm</p>             <p style="margin: 2px 0;"><strong>SO₂ Promedio:</strong> 0.000360 ppm</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Datos Satelitales</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Satelital:</strong> 10.26 μg/m³</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Estadísticas</h4>             <p style="margin: 2px 0;"><strong>Predicciones:</strong> 753</p>             <p style="margin: 2px 0;"><strong>Nivel:</strong> <span style="color: green;">Buena</span></p>         </div>         </div>`)[0];
+                popup_42eaef4c7004824927222fd573dfe2dd.setContent(html_0dd2814602646b9c2ad01e1675ce16b8);
+            
+        
+
+        circle_marker_363deea767a812bc9462af9a487e2b57.bindPopup(popup_42eaef4c7004824927222fd573dfe2dd)
+        ;
+
+        
+    
+    
+            var marker_dff54dc087b0406531c2abbf0251ff23 = L.marker(
+                [39.7392, -104.9903],
+                {
+}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var div_icon_af17b89da3b12e3c186039ebe6183d3a = L.divIcon({
+  "html": "\u003cdiv style=\"font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; background: white; padding: 2px 4px; border-radius: 3px; border: 1px solid #bdc3c7;\"\u003eDenver\u003c/div\u003e",
+  "iconSize": [50, 20],
+  "iconAnchor": [25, 10],
+  "className": "empty",
+});
+        
+    
+                marker_dff54dc087b0406531c2abbf0251ff23.setIcon(div_icon_af17b89da3b12e3c186039ebe6183d3a);
+            
+    
+            var circle_marker_6cabcf9fb571474e59c2aba15276250c = L.circleMarker(
+                [33.4484, -112.074],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+        var popup_ac9c31b0c227892a620f5b9d31727669 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_ed9e5719dc29bd69754c2af5167701fe = $(`<div id="html_ed9e5719dc29bd69754c2af5167701fe" style="width: 100.0%; height: 100.0%;">         <div style="width: 300px;">             <h3 style="margin: 0; color: #2c3e50;">Phoenix, AZ</h3>             <p style="margin: 5px 0;"><strong>Estación ID:</strong> 2113</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Calidad del Aire</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Promedio:</strong> 8.17 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM2.5 Máximo:</strong> 70.62 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM10 Promedio:</strong> 36.55 μg/m³</p>             <p style="margin: 2px 0;"><strong>NO₂ Promedio:</strong> 0.0130 ppm</p>             <p style="margin: 2px 0;"><strong>O₃ Promedio:</strong> 0.0213 ppm</p>             <p style="margin: 2px 0;"><strong>SO₂ Promedio:</strong> 0.000351 ppm</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Datos Satelitales</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Satelital:</strong> 10.03 μg/m³</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Estadísticas</h4>             <p style="margin: 2px 0;"><strong>Predicciones:</strong> 753</p>             <p style="margin: 2px 0;"><strong>Nivel:</strong> <span style="color: green;">Buena</span></p>         </div>         </div>`)[0];
+                popup_ac9c31b0c227892a620f5b9d31727669.setContent(html_ed9e5719dc29bd69754c2af5167701fe);
+            
+        
+
+        circle_marker_6cabcf9fb571474e59c2aba15276250c.bindPopup(popup_ac9c31b0c227892a620f5b9d31727669)
+        ;
+
+        
+    
+    
+            var marker_605af5944aadd90ef717aa9504dcf3a9 = L.marker(
+                [33.4484, -112.074],
+                {
+}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var div_icon_2346c3151f6b466de3484e3832222052 = L.divIcon({
+  "html": "\u003cdiv style=\"font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; background: white; padding: 2px 4px; border-radius: 3px; border: 1px solid #bdc3c7;\"\u003ePhoenix\u003c/div\u003e",
+  "iconSize": [50, 20],
+  "iconAnchor": [25, 10],
+  "className": "empty",
+});
+        
+    
+                marker_605af5944aadd90ef717aa9504dcf3a9.setIcon(div_icon_2346c3151f6b466de3484e3832222052);
+            
+    
+            var circle_marker_42ac923c1656e8e701089870082fbc35 = L.circleMarker(
+                [29.7604, -95.3698],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+        var popup_b4acc74dcb1518d6410df208ece5a7b6 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_cc030d192c836f61133e9d1a93652e17 = $(`<div id="html_cc030d192c836f61133e9d1a93652e17" style="width: 100.0%; height: 100.0%;">         <div style="width: 300px;">             <h3 style="margin: 0; color: #2c3e50;">Houston, TX</h3>             <p style="margin: 5px 0;"><strong>Estación ID:</strong> 2124</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Calidad del Aire</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Promedio:</strong> 10.40 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM2.5 Máximo:</strong> 89.88 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM10 Promedio:</strong> 34.26 μg/m³</p>             <p style="margin: 2px 0;"><strong>NO₂ Promedio:</strong> 0.0189 ppm</p>             <p style="margin: 2px 0;"><strong>O₃ Promedio:</strong> 0.0212 ppm</p>             <p style="margin: 2px 0;"><strong>SO₂ Promedio:</strong> 0.000354 ppm</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Datos Satelitales</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Satelital:</strong> 9.95 μg/m³</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Estadísticas</h4>             <p style="margin: 2px 0;"><strong>Predicciones:</strong> 753</p>             <p style="margin: 2px 0;"><strong>Nivel:</strong> <span style="color: green;">Buena</span></p>         </div>         </div>`)[0];
+                popup_b4acc74dcb1518d6410df208ece5a7b6.setContent(html_cc030d192c836f61133e9d1a93652e17);
+            
+        
+
+        circle_marker_42ac923c1656e8e701089870082fbc35.bindPopup(popup_b4acc74dcb1518d6410df208ece5a7b6)
+        ;
+
+        
+    
+    
+            var marker_a88690598623480c65bc71b1a0416a06 = L.marker(
+                [29.7604, -95.3698],
+                {
+}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var div_icon_6630e6a9f327ac71c2edaf8396b2fda4 = L.divIcon({
+  "html": "\u003cdiv style=\"font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; background: white; padding: 2px 4px; border-radius: 3px; border: 1px solid #bdc3c7;\"\u003eHouston\u003c/div\u003e",
+  "iconSize": [50, 20],
+  "iconAnchor": [25, 10],
+  "className": "empty",
+});
+        
+    
+                marker_a88690598623480c65bc71b1a0416a06.setIcon(div_icon_6630e6a9f327ac71c2edaf8396b2fda4);
+            
+    
+            var circle_marker_1e64b2dbb028bab202dad5d3f2ef38ef = L.circleMarker(
+                [41.8781, -87.6298],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+        var popup_cc28f2c0b3ff12db6d8b2e76ac809841 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_5c785ded0bf4c6b075876d1a9eb3bd08 = $(`<div id="html_5c785ded0bf4c6b075876d1a9eb3bd08" style="width: 100.0%; height: 100.0%;">         <div style="width: 300px;">             <h3 style="margin: 0; color: #2c3e50;">Chicago, IL</h3>             <p style="margin: 5px 0;"><strong>Estación ID:</strong> 2135</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Calidad del Aire</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Promedio:</strong> 8.91 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM2.5 Máximo:</strong> 77.04 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM10 Promedio:</strong> 31.98 μg/m³</p>             <p style="margin: 2px 0;"><strong>NO₂ Promedio:</strong> 0.0153 ppm</p>             <p style="margin: 2px 0;"><strong>O₃ Promedio:</strong> 0.0210 ppm</p>             <p style="margin: 2px 0;"><strong>SO₂ Promedio:</strong> 0.000357 ppm</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Datos Satelitales</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Satelital:</strong> 9.98 μg/m³</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Estadísticas</h4>             <p style="margin: 2px 0;"><strong>Predicciones:</strong> 753</p>             <p style="margin: 2px 0;"><strong>Nivel:</strong> <span style="color: green;">Buena</span></p>         </div>         </div>`)[0];
+                popup_cc28f2c0b3ff12db6d8b2e76ac809841.setContent(html_5c785ded0bf4c6b075876d1a9eb3bd08);
+            
+        
+
+        circle_marker_1e64b2dbb028bab202dad5d3f2ef38ef.bindPopup(popup_cc28f2c0b3ff12db6d8b2e76ac809841)
+        ;
+
+        
+    
+    
+            var marker_016709e5eec64b059e376f6d383355e3 = L.marker(
+                [41.8781, -87.6298],
+                {
+}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var div_icon_4b26a56a8117718b354f8d1850d59a54 = L.divIcon({
+  "html": "\u003cdiv style=\"font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; background: white; padding: 2px 4px; border-radius: 3px; border: 1px solid #bdc3c7;\"\u003eChicago\u003c/div\u003e",
+  "iconSize": [50, 20],
+  "iconAnchor": [25, 10],
+  "className": "empty",
+});
+        
+    
+                marker_016709e5eec64b059e376f6d383355e3.setIcon(div_icon_4b26a56a8117718b354f8d1850d59a54);
+            
+    
+            var circle_marker_75650749b0a2c2d1c0771df27f56e265 = L.circleMarker(
+                [40.7128, -74.006],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+        var popup_8ba196c33159edbba37677123d874c9c = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_2bca719eb4b22218e6e5b20a02ab6b7c = $(`<div id="html_2bca719eb4b22218e6e5b20a02ab6b7c" style="width: 100.0%; height: 100.0%;">         <div style="width: 300px;">             <h3 style="margin: 0; color: #2c3e50;">New York, NY</h3>             <p style="margin: 5px 0;"><strong>Estación ID:</strong> 2146</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Calidad del Aire</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Promedio:</strong> 8.17 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM2.5 Máximo:</strong> 70.62 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM10 Promedio:</strong> 29.69 μg/m³</p>             <p style="margin: 2px 0;"><strong>NO₂ Promedio:</strong> 0.0177 ppm</p>             <p style="margin: 2px 0;"><strong>O₃ Promedio:</strong> 0.0212 ppm</p>             <p style="margin: 2px 0;"><strong>SO₂ Promedio:</strong> 0.000351 ppm</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Datos Satelitales</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Satelital:</strong> 10.08 μg/m³</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Estadísticas</h4>             <p style="margin: 2px 0;"><strong>Predicciones:</strong> 753</p>             <p style="margin: 2px 0;"><strong>Nivel:</strong> <span style="color: green;">Buena</span></p>         </div>         </div>`)[0];
+                popup_8ba196c33159edbba37677123d874c9c.setContent(html_2bca719eb4b22218e6e5b20a02ab6b7c);
+            
+        
+
+        circle_marker_75650749b0a2c2d1c0771df27f56e265.bindPopup(popup_8ba196c33159edbba37677123d874c9c)
+        ;
+
+        
+    
+    
+            var marker_a6336e9f95bb0fd00728ff09242f53e6 = L.marker(
+                [40.7128, -74.006],
+                {
+}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var div_icon_6674a0703d4d3436f4b06977c5374bcc = L.divIcon({
+  "html": "\u003cdiv style=\"font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; background: white; padding: 2px 4px; border-radius: 3px; border: 1px solid #bdc3c7;\"\u003eNew York\u003c/div\u003e",
+  "iconSize": [50, 20],
+  "iconAnchor": [25, 10],
+  "className": "empty",
+});
+        
+    
+                marker_a6336e9f95bb0fd00728ff09242f53e6.setIcon(div_icon_6674a0703d4d3436f4b06977c5374bcc);
+            
+    
+            var circle_marker_e06b502b4e8a1156013e85f9f3106659 = L.circleMarker(
+                [34.0522, -118.2437],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+        var popup_7cb6a02d1988b9217cd4e418bad891f2 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_ee1203bdb81627015d00c45e0b3f4db8 = $(`<div id="html_ee1203bdb81627015d00c45e0b3f4db8" style="width: 100.0%; height: 100.0%;">         <div style="width: 300px;">             <h3 style="margin: 0; color: #2c3e50;">Los Angeles, CA</h3>             <p style="margin: 5px 0;"><strong>Estación ID:</strong> 2157</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Calidad del Aire</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Promedio:</strong> 9.66 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM2.5 Máximo:</strong> 83.46 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM10 Promedio:</strong> 27.41 μg/m³</p>             <p style="margin: 2px 0;"><strong>NO₂ Promedio:</strong> 0.0165 ppm</p>             <p style="margin: 2px 0;"><strong>O₃ Promedio:</strong> 0.0210 ppm</p>             <p style="margin: 2px 0;"><strong>SO₂ Promedio:</strong> 0.000353 ppm</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Datos Satelitales</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Satelital:</strong> 10.19 μg/m³</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Estadísticas</h4>             <p style="margin: 2px 0;"><strong>Predicciones:</strong> 753</p>             <p style="margin: 2px 0;"><strong>Nivel:</strong> <span style="color: green;">Buena</span></p>         </div>         </div>`)[0];
+                popup_7cb6a02d1988b9217cd4e418bad891f2.setContent(html_ee1203bdb81627015d00c45e0b3f4db8);
+            
+        
+
+        circle_marker_e06b502b4e8a1156013e85f9f3106659.bindPopup(popup_7cb6a02d1988b9217cd4e418bad891f2)
+        ;
+
+        
+    
+    
+            var marker_d5f526e1dc630acf83e5fe5b91bbd227 = L.marker(
+                [34.0522, -118.2437],
+                {
+}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var div_icon_526be6fbca6b052af27bc0a047d80ea2 = L.divIcon({
+  "html": "\u003cdiv style=\"font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; background: white; padding: 2px 4px; border-radius: 3px; border: 1px solid #bdc3c7;\"\u003eLos Angeles\u003c/div\u003e",
+  "iconSize": [50, 20],
+  "iconAnchor": [25, 10],
+  "className": "empty",
+});
+        
+    
+                marker_d5f526e1dc630acf83e5fe5b91bbd227.setIcon(div_icon_526be6fbca6b052af27bc0a047d80ea2);
+            
+    
+            var circle_marker_5ca4cfe861141f918e0a1d8140374812 = L.circleMarker(
+                [32.9595, -117.1145],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 2}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+        var popup_3da221a91183030a91f987a85eee32e4 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_48328c84930c1f39db18522634180c0f = $(`<div id="html_48328c84930c1f39db18522634180c0f" style="width: 100.0%; height: 100.0%;">         <div style="width: 300px;">             <h3 style="margin: 0; color: #2c3e50;">San Diego, CA</h3>             <p style="margin: 5px 0;"><strong>Estación ID:</strong> 2178</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Calidad del Aire</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Promedio:</strong> 7.25 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM2.5 Máximo:</strong> 64.20 μg/m³</p>             <p style="margin: 2px 0;"><strong>PM10 Promedio:</strong> 22.66 μg/m³</p>             <p style="margin: 2px 0;"><strong>NO₂ Promedio:</strong> 0.0114 ppm</p>             <p style="margin: 2px 0;"><strong>O₃ Promedio:</strong> 0.0216 ppm</p>             <p style="margin: 2px 0;"><strong>SO₂ Promedio:</strong> 0.000343 ppm</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Datos Satelitales</h4>             <p style="margin: 2px 0;"><strong>PM2.5 Satelital:</strong> 6.60 μg/m³</p>                          <h4 style="margin: 10px 0 5px 0; color: #34495e;">Estadísticas</h4>             <p style="margin: 2px 0;"><strong>Predicciones:</strong> 1506</p>             <p style="margin: 2px 0;"><strong>Nivel:</strong> <span style="color: green;">Buena</span></p>         </div>         </div>`)[0];
+                popup_3da221a91183030a91f987a85eee32e4.setContent(html_48328c84930c1f39db18522634180c0f);
+            
+        
+
+        circle_marker_5ca4cfe861141f918e0a1d8140374812.bindPopup(popup_3da221a91183030a91f987a85eee32e4)
+        ;
+
+        
+    
+    
+            var marker_3e34473a12d63a25dc343779ec8e4f2c = L.marker(
+                [32.9595, -117.1145],
+                {
+}
+            ).addTo(map_4b6df10f278f8e9ffc3e9fba76726985);
+        
+    
+            var div_icon_cfd6a5286a9c504cd74fe0b77e474673 = L.divIcon({
+  "html": "\u003cdiv style=\"font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; background: white; padding: 2px 4px; border-radius: 3px; border: 1px solid #bdc3c7;\"\u003eSan Diego\u003c/div\u003e",
+  "iconSize": [50, 20],
+  "iconAnchor": [25, 10],
+  "className": "empty",
+});
+        
+    
+                marker_3e34473a12d63a25dc343779ec8e4f2c.setIcon(div_icon_cfd6a5286a9c504cd74fe0b77e474673);
+            
+</script>
+</html>
