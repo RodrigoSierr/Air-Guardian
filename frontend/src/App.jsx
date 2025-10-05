@@ -3,7 +3,7 @@ import MapView from './components/MapView'
 import Sidebar from './components/Sidebar'
 import DetailPanel from './components/DetailPanel'
 import Header from './components/Header'
-import { fetchStations } from './services/api'
+import { fetchStations, fetchStationsByCountry } from './services/api'
 import './App.css'
 
 function App() {
@@ -21,11 +21,33 @@ function App() {
     try {
       setLoading(true)
       setError(null)
-      const data = await fetchStations()
-      setStations(data)
+      
+      // Try to get stations by country first (Peru), then fallback to general stations
+      let data = await fetchStationsByCountry('PE', 50)
+      
+      // If no data from Peru, try general stations
+      if (!data || data.length === 0) {
+        data = await fetchStations()
+      }
+      
+      // If still no data, try other countries
+      if (!data || data.length === 0) {
+        data = await fetchStationsByCountry('US', 30)
+      }
+      
+      if (!data || data.length === 0) {
+        data = await fetchStationsByCountry('MX', 30)
+      }
+      
+      setStations(data || [])
+      
+      if (!data || data.length === 0) {
+        setError('No air quality data available. Please check your connection and try again.')
+      }
     } catch (err) {
       console.error('Error loading stations:', err)
       setError('Failed to load air quality data. Please try again.')
+      setStations([])
     } finally {
       setLoading(false)
     }

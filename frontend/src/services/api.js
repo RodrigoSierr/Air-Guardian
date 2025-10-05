@@ -20,7 +20,20 @@ export const fetchStations = async (lat = null, lon = null, radius = 50) => {
     return response.data
   } catch (error) {
     console.error('Error fetching stations:', error)
-    throw error
+    // Return empty array instead of throwing to prevent app crash
+    return []
+  }
+}
+
+export const fetchStationsByCountry = async (country = 'PE', limit = 100) => {
+  try {
+    const response = await api.get(`/api/stations/by-country/${country}`, {
+      params: { limit }
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error fetching stations by country:', error)
+    return []
   }
 }
 

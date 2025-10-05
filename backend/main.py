@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 import asyncio
+from config import OPENAQ_API_KEY, CORS_ORIGINS, OPENWEATHER_API_KEY
 
 load_dotenv()
 
@@ -15,7 +16,7 @@ app = FastAPI(title="AirGuardian API", version="1.0.0")
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:5173").split(","),
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -91,25 +92,31 @@ async def get_stations(lat: Optional[float] = None, lon: Optional[float] = None,
     """Get air quality monitoring stations from OpenAQ"""
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
-            # OpenAQ API v2
+            # OpenAQ API v3 with API key
+            headers = {
+                "X-API-Key": OPENAQ_API_KEY
+            }
+            
             params = {
                 "limit": 100,
                 "order_by": "lastUpdated",
                 "sort": "desc"
             }
             
-            if lat and lon:
+            if lat is not None and lon is not None:
                 params["coordinates"] = f"{lat},{lon}"
                 params["radius"] = radius * 1000  # Convert km to meters
             
             response = await client.get(
-                "https://api.openaq.org/v2/latest",
-                params=params
+                "https://api.openaq.org/v3/latest",
+                params=params,
+                headers=headers
             )
             
             if response.status_code != 200:
-                # Return mock data if API fails
-                return get_mock_stations()
+                print(f"OpenAQ API error: {response.status_code} - {response.text}")
+                # Try to get data from multiple countries as fallback
+                return await get_fallback_stations()
             
             data = response.json()
             stations = []
@@ -118,6 +125,9 @@ async def get_stations(lat: Optional[float] = None, lon: Optional[float] = None,
                 measurements = result.get("measurements", [])
                 pollutants = {}
                 pm25_value = None
+                pm10_value = None
+                no2_value = None
+                o3_value = None
                 
                 for measurement in measurements:
                     parameter = measurement.get("parameter")
@@ -126,9 +136,21 @@ async def get_stations(lat: Optional[float] = None, lon: Optional[float] = None,
                         pollutants[parameter] = value
                         if parameter == "pm25":
                             pm25_value = value
+                        elif parameter == "pm10":
+                            pm10_value = value
+                        elif parameter == "no2":
+                            no2_value = value
+                        elif parameter == "o3":
+                            o3_value = value
                 
-                # Calculate AQI from PM2.5 if available
-                aqi = calculate_aqi_pm25(pm25_value) if pm25_value else None
+                # Calculate AQI from PM2.5 if available, otherwise use PM10
+                aqi = None
+                if pm25_value:
+                    aqi = calculate_aqi_pm25(pm25_value)
+                elif pm10_value:
+                    # Convert PM10 to PM2.5 equivalent (rough estimation)
+                    pm25_equivalent = pm10_value * 0.7
+                    aqi = calculate_aqi_pm25(pm25_equivalent)
                 
                 coordinates = result.get("coordinates", {})
                 location = result.get("location", "Unknown")
@@ -152,19 +174,121 @@ async def get_stations(lat: Optional[float] = None, lon: Optional[float] = None,
         # Return mock data on error
         return get_mock_stations()
 
+async def get_fallback_stations() -> List[StationData]:
+    """Try to get stations from multiple countries as fallback"""
+    countries = ['US', 'MX', 'CA', 'GB', 'DE', 'FR', 'IT', 'ES', 'AU', 'JP']
+    all_stations = []
+    
+    for country in countries[:3]:  # Try first 3 countries
+        try:
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                headers = {"X-API-Key": OPENAQ_API_KEY}
+                params = {
+                    "limit": 20,
+                    "country": country,
+                    "order_by": "lastUpdated",
+                    "sort": "desc"
+                }
+                
+                response = await client.get(
+                    "https://api.openaq.org/v3/latest",
+                    params=params,
+                    headers=headers
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    for result in data.get("results", []):
+                        measurements = result.get("measurements", [])
+                        pollutants = {}
+                        pm25_value = None
+                        
+                        for measurement in measurements:
+                            parameter = measurement.get("parameter")
+                            value = measurement.get("value")
+                            if parameter and value:
+                                pollutants[parameter] = value
+                                if parameter == "pm25":
+                                    pm25_value = value
+                        
+                        aqi = calculate_aqi_pm25(pm25_value) if pm25_value else None
+                        coordinates = result.get("coordinates", {})
+                        location = result.get("location", "Unknown")
+                        
+                        if coordinates.get("latitude") is not None and coordinates.get("longitude") is not None:
+                            station = StationData(
+                                station_id=str(result.get("location", "").replace(" ", "_") + "_" + str(result.get("locationId", ""))),
+                                name=location,
+                                latitude=coordinates["latitude"],
+                                longitude=coordinates["longitude"],
+                                aqi=aqi,
+                                pollutants=pollutants,
+                                last_update=result.get("lastUpdated", datetime.utcnow().isoformat())
+                            )
+                            all_stations.append(station)
+                            
+                            if len(all_stations) >= 30:  # Limit total stations
+                                break
+                                
+        except Exception as e:
+            print(f"Error fetching stations from {country}: {e}")
+            continue
+    
+    # If we got some real data, return it, otherwise return mock data
+    return all_stations if all_stations else get_mock_stations()
+
 def get_mock_stations() -> List[StationData]:
     """Return mock station data for development"""
     import random
     
     cities = [
+        # Perú - Lima y alrededores
         {"name": "Lima Centro", "lat": -12.0464, "lon": -77.0428},
         {"name": "Lima Norte", "lat": -11.9856, "lon": -77.0502},
         {"name": "Callao", "lat": -12.0565, "lon": -77.1181},
         {"name": "San Isidro", "lat": -12.0931, "lon": -77.0465},
         {"name": "Miraflores", "lat": -12.1196, "lon": -77.0288},
+        {"name": "La Molina", "lat": -12.0708, "lon": -76.9656},
+        {"name": "Surco", "lat": -12.1508, "lon": -76.9908},
+        {"name": "Pueblo Libre", "lat": -12.0753, "lon": -77.0625},
+        {"name": "Jesús María", "lat": -12.0833, "lon": -77.0333},
+        {"name": "Magdalena", "lat": -12.0958, "lon": -77.0781},
+        
+        # Chile
         {"name": "Santiago Centro", "lat": -33.4489, "lon": -70.6693},
-        {"name": "Mexico City", "lat": 19.4326, "lon": -99.1332},
-        {"name": "Bogotá", "lat": 4.7110, "lon": -74.0721},
+        {"name": "Valparaíso", "lat": -33.0472, "lon": -71.6127},
+        {"name": "Concepción", "lat": -36.8201, "lon": -73.0444},
+        {"name": "Antofagasta", "lat": -23.6509, "lon": -70.3975},
+        
+        # México
+        {"name": "Mexico City Centro", "lat": 19.4326, "lon": -99.1332},
+        {"name": "Guadalajara", "lat": 20.6597, "lon": -103.3496},
+        {"name": "Monterrey", "lat": 25.6866, "lon": -100.3161},
+        {"name": "Puebla", "lat": 19.0414, "lon": -98.2063},
+        
+        # Colombia
+        {"name": "Bogotá Centro", "lat": 4.7110, "lon": -74.0721},
+        {"name": "Medellín", "lat": 6.2442, "lon": -75.5812},
+        {"name": "Cali", "lat": 3.4516, "lon": -76.5320},
+        {"name": "Barranquilla", "lat": 10.9685, "lon": -74.7813},
+        
+        # Argentina
+        {"name": "Buenos Aires", "lat": -34.6118, "lon": -58.3960},
+        {"name": "Córdoba", "lat": -31.4201, "lon": -64.1888},
+        {"name": "Rosario", "lat": -32.9442, "lon": -60.6505},
+        
+        # Brasil
+        {"name": "São Paulo", "lat": -23.5505, "lon": -46.6333},
+        {"name": "Río de Janeiro", "lat": -22.9068, "lon": -43.1729},
+        {"name": "Brasilia", "lat": -15.7801, "lon": -47.9292},
+        
+        # Ecuador
+        {"name": "Quito", "lat": -0.1807, "lon": -78.4678},
+        {"name": "Guayaquil", "lat": -2.1894, "lon": -79.8890},
+        
+        # Bolivia
+        {"name": "La Paz", "lat": -16.2902, "lon": -68.1346},
+        {"name": "Santa Cruz", "lat": -17.7833, "lon": -63.1833},
     ]
     
     stations = []
@@ -190,6 +314,82 @@ def get_mock_stations() -> List[StationData]:
     
     return stations
 
+@app.get("/api/stations/by-country/{country}")
+async def get_stations_by_country(country: str, limit: int = 100):
+    """Get air quality stations for a specific country"""
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            headers = {
+                "X-API-Key": OPENAQ_API_KEY
+            }
+            
+            # Use the latest measurements endpoint with country filter
+            params = {
+                "limit": limit,
+                "country": country,
+                "order_by": "lastUpdated",
+                "sort": "desc"
+            }
+            
+            response = await client.get(
+                "https://api.openaq.org/v3/latest",
+                params=params,
+                headers=headers
+            )
+            
+            if response.status_code != 200:
+                print(f"OpenAQ API error: {response.status_code} - {response.text}")
+                return []
+            
+            data = response.json()
+            stations = []
+            
+            for result in data.get("results", []):
+                measurements = result.get("measurements", [])
+                pollutants = {}
+                pm25_value = None
+                pm10_value = None
+                
+                for measurement in measurements:
+                    parameter = measurement.get("parameter")
+                    value = measurement.get("value")
+                    if parameter and value:
+                        pollutants[parameter] = value
+                        if parameter == "pm25":
+                            pm25_value = value
+                        elif parameter == "pm10":
+                            pm10_value = value
+                
+                # Calculate AQI from PM2.5 if available, otherwise use PM10
+                aqi = None
+                if pm25_value:
+                    aqi = calculate_aqi_pm25(pm25_value)
+                elif pm10_value:
+                    # Convert PM10 to PM2.5 equivalent (rough estimation)
+                    pm25_equivalent = pm10_value * 0.7
+                    aqi = calculate_aqi_pm25(pm25_equivalent)
+                
+                coordinates = result.get("coordinates", {})
+                location = result.get("location", "Unknown")
+                
+                if coordinates.get("latitude") is not None and coordinates.get("longitude") is not None:
+                    station = StationData(
+                        station_id=str(result.get("location", "").replace(" ", "_") + "_" + str(result.get("locationId", ""))),
+                        name=location,
+                        latitude=coordinates["latitude"],
+                        longitude=coordinates["longitude"],
+                        aqi=aqi,
+                        pollutants=pollutants,
+                        last_update=result.get("lastUpdated", datetime.utcnow().isoformat())
+                    )
+                    stations.append(station)
+            
+            return stations
+            
+    except Exception as e:
+        print(f"Error fetching stations by country: {e}")
+        return []
+
 @app.get("/api/station/{station_id}")
 async def get_station_details(station_id: str):
     """Get detailed information for a specific station"""
@@ -204,7 +404,7 @@ async def get_station_details(station_id: str):
 @app.get("/api/weather")
 async def get_weather(lat: float, lon: float):
     """Get weather data from OpenWeatherMap"""
-    api_key = os.getenv("OPENWEATHER_API_KEY")
+    api_key = OPENWEATHER_API_KEY
     
     if not api_key or api_key == "your_openweather_api_key_here":
         # Return mock weather data
