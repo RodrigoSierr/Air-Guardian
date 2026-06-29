@@ -2,6 +2,8 @@
 
 Una aplicación web completa para el pronóstico de calidad del aire que integra datos en tiempo real de satélites, sensores terrestres y datos meteorológicos con machine learning para predicciones precisas.
 
+Video Introductorio + Responsables del desarrollo: https://www.youtube.com/watch?v=40QMoU_xU5c
+
 ![AirGuardian](https://img.shields.io/badge/Status-Active-success)
 ![Python](https://img.shields.io/badge/Python-3.9+-blue)
 ![React](https://img.shields.io/badge/React-18-61dafb)
